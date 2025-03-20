@@ -1,0 +1,193 @@
+<div class="p-grid p-justify-center">
+  <div class="p-col-12 md:p-col-10 lg:p-col-8">
+    <p-card header="Listas de Reproducción">
+      <div class="p-mb-4">
+        <button
+          pButton
+          type="button"
+          label="Crear Nueva Lista"
+          icon="pi pi-plus"
+          class="p-button-success"
+          (click)="openCreateDialog()"
+        ></button>
+      </div>
+
+      <p-table [value]="playlists" [paginator]="true" [rows]="5">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-playlist>
+          <tr>
+            <td>{{ playlist.nombre }}</td>
+            <td>{{ playlist.descripcion }}</td>
+            <td>
+              <i
+                class="pi pi-eye p-mr-3"
+                style="cursor: pointer; color: var(--primary-color)"
+                (click)="viewPlaylistDetails(playlist.nombre)"
+              ></i>
+              <i
+                class="pi pi-trash"
+                style="cursor: pointer; color: red"
+                (click)="deletePlaylist(playlist.nombre)"
+              ></i>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>
+
+<p-dialog
+  header="Nueva Lista"
+  [(visible)]="displayDialog"
+  [style]="{ width: '600px' }"
+  [modal]="true"
+>
+  <form [formGroup]="playlistForm" (ngSubmit)="createPlaylist()">
+    <div class="p-fluid">
+      <!-- Nombre -->
+      <div class="p-field p-grid p-mb-4">
+        <label class="p-col-12 p-mb-2">Nombre</label>
+        <div class="p-col-12">
+          <input
+            pInputText
+            formControlName="nombre"
+            placeholder="Nombre de la lista"
+          />
+          <small
+            *ngIf="
+              playlistForm.get('nombre')?.invalid &&
+              playlistForm.get('nombre')?.touched
+            "
+            class="p-error"
+          >
+            Requerido (mínimo 3 caracteres)
+          </small>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="p-field p-grid p-mb-4">
+        <label class="p-col-12 p-mb-2">Descripción</label>
+        <div class="p-col-12">
+          <textarea
+            pInputTextarea
+            formControlName="descripcion"
+            rows="3"
+            placeholder="Descripción opcional"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Sección de Canciones -->
+      <div class="p-field">
+        <label class="p-mb-3">Canciones</label>
+        <div formArrayName="canciones">
+          <div
+            *ngFor="let song of canciones.controls; let i = index"
+            [formGroupName]="i"
+            class="p-mb-3 p-p-3 p-shadow-2"
+          >
+            <div class="p-grid">
+              <div class="p-col-12 p-md-6 p-mb-2">
+                <input
+                  pInputText
+                  formControlName="titulo"
+                  placeholder="Título"
+                />
+                <small
+                  *ngIf="canciones.at(i).get('titulo')?.invalid"
+                  class="p-error"
+                  >Requerido</small
+                >
+              </div>
+              <div class="p-col-12 p-md-6 p-mb-2">
+                <input
+                  pInputText
+                  formControlName="artista"
+                  placeholder="Artista"
+                />
+                <small
+                  *ngIf="canciones.at(i).get('artista')?.invalid"
+                  class="p-error"
+                  >Requerido</small
+                >
+              </div>
+              <div class="p-col-12 p-md-6 p-mb-2">
+                <input pInputText formControlName="album" placeholder="Álbum" />
+                <small
+                  *ngIf="canciones.at(i).get('album')?.invalid"
+                  class="p-error"
+                  >Requerido</small
+                >
+              </div>
+              <div class="p-col-12 p-md-6 p-mb-2">
+                <input pInputText formControlName="anno" placeholder="Año" />
+                <small
+                  *ngIf="canciones.at(i).get('anno')?.invalid"
+                  class="p-error"
+                  >Año inválido (4 dígitos)</small
+                >
+              </div>
+              <div class="p-col-12 p-md-6 p-mb-2">
+                <input
+                  pInputText
+                  formControlName="genero"
+                  placeholder="Género"
+                />
+                <small
+                  *ngIf="canciones.at(i).get('genero')?.invalid"
+                  class="p-error"
+                  >Requerido</small
+                >
+              </div>
+              <div class="p-col-12 p-md-6 p-mb-2">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  (click)="removeSong(i)"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          pButton
+          type="button"
+          label="Agregar Canción"
+          icon="pi pi-plus"
+          class="p-button-secondary p-mt-2"
+          (click)="addSong()"
+        ></button>
+      </div>
+
+      <!-- Botón de envío -->
+      <div class="p-grid p-mt-4">
+        <div class="p-col-12">
+          <button
+            pButton
+            type="submit"
+            label="Crear Lista"
+            class="p-button-primary w-full"
+            [disabled]="playlistForm.invalid"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+
+<div class="container mx-auto p-4">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <div class="flex justify-between items-center mb-4"></div>
+</div>
