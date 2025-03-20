@@ -1,0 +1,55 @@
+<div
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f3f5;
+  "
+>
+  <div class="col-11 md:col-6 lg:col-4">
+    <p-card header="Login" styleClass="p-shadow-3">
+      <form (ngSubmit)="login()">
+        <div class="p-fluid">
+          <div class="p-field mb-3">
+            <label for="username" class="block mb-2">Username</label>
+            <input
+              id="username"
+              type="text"
+              pInputText
+              [(ngModel)]="username"
+              name="username"
+              required
+              placeholder="Ingresa tu usuario"
+              class="w-full"
+            />
+          </div>
+
+          <div class="p-field mb-3">
+            <label for="password" class="block mb-2">Password</label>
+            <input
+              id="password"
+              type="password"
+              pInputText
+              [(ngModel)]="password"
+              name="password"
+              required
+              placeholder="Ingresa tu contraseña"
+              class="w-full"
+            />
+          </div>
+
+          <button
+            pButton
+            type="submit"
+            label="Login"
+            class="p-button-primary w-full"
+            [disabled]="!isFormValid()"
+          ></button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>
+
+<p-toast></p-toast>
