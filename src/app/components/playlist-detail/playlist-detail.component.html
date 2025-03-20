@@ -1,0 +1,53 @@
+<div class="container mx-auto p-4">
+  <p-toast></p-toast>
+
+  <div *ngIf="loading" class="flex justify-center items-center h-64">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
+  <div *ngIf="!loading && playlist" class="space-y-4">
+    <p-card [header]="playlist.nombre">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold mb-2">Descripción</h2>
+        <p>{{ playlist.descripcion || "Sin descripción" }}</p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Canciones</h2>
+        <p-table
+          [value]="playlist.canciones"
+          [paginator]="true"
+          [rows]="5"
+          responsiveLayout="scroll"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Título</th>
+              <th>Artista</th>
+              <th>Álbum</th>
+              <th>Año</th>
+              <th>Género</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-cancion>
+            <tr>
+              <td>{{ cancion.titulo }}</td>
+              <td>{{ cancion.artista }}</td>
+              <td>{{ cancion.album }}</td>
+              <td>{{ cancion.anno }}</td>
+              <td>{{ cancion.genero }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-card>
+  </div>
+
+  <div *ngIf="!loading && !playlist" class="text-center">
+    <p-card>
+      <h2 class="text-xl font-semibold text-red-500">
+        No se encontró la lista de reproducción
+      </h2>
+    </p-card>
+  </div>
+</div>
